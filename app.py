@@ -121,7 +121,7 @@ def calc_temps(start):
 
     """TMIN, TAVG, and TMAX for a list of dates."""
 
-    results=session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start).all()
+    results=session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
     
     # Convert list of tuples into normal list
     temps={}

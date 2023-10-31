@@ -114,6 +114,7 @@ def temperature():
 
 
 @app.route("/api/v1.0/<start>")
+@app.route("/api/v1.0/<start>/<end>")
 def calc_temps(start):
     # Create our session (link) from Python to the DB
     session = Session(engine)
@@ -129,26 +130,6 @@ def calc_temps(start):
     temps["max_Temp"]=results[0][2]
 
     return jsonify(temps)
-
-
-@app.route("/api/v1.0/<start>/<end>")
-def calc_temps(start, end):
-    # Create our session (link) from Python to the DB
-    session = Session(engine)
-
-    """TMIN, TAVG, and TMAX for a list of dates."""
-
-    results=session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
-    session.close()
-    
-    # Convert list of tuples into normal list
-    temps={}
-    temps["min_Temp"]=results[0][0]
-    temps["avg_Temp"]=results[0][1]
-    temps["max_Temp"]=results[0][2]
-
-    return jsonify(temps)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
